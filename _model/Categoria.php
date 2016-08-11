@@ -1,6 +1,7 @@
 <?php
     /**
     * Classe que representa uma categoria
+    * @version 1
     * @author Ives Matheus
     */
     class Categoria

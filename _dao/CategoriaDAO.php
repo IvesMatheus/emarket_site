@@ -1,9 +1,9 @@
 <?php
-    include "../_model/Conexao.php";
-    include "../_model/Categoria.php";
+    include_once "../_model/Conexao.php";
+    include_once "../_model/Categoria.php";
 
     /**
-    * Classe DAO ce categoria que implementa métodos de CRUD e outras que meche no BD
+    * Classe DAO de categoria que implementa métodos de CRUD e outras que meche no BD
     * @version 1
     * @author Ives Matheus
     */
@@ -19,7 +19,7 @@
         * @version 1
         * @author Ives Matheus
         */
-        public function insere($categorias)
+        public function inserir($categorias)
         {
             $con = Conexao::getConexao();
             $retorno = false;
@@ -101,7 +101,7 @@
         * @version 1
         * @author Ives Matheus
         */
-        public function listaPorId($categoria)
+        public static function listaPorId($categoria)
         {
             $retorno = null;
 
@@ -140,7 +140,7 @@
         * @version 1
         * @author Ives Matheus
         */
-        public function atualiza($categorias)
+        public function atualizar($categorias)
         {
             $con = Conexao::getConexao();
             $retorno = false;
@@ -181,7 +181,7 @@
         * @version 1
         * @author Ives Matheus
         */
-        public function exclui($categorias)
+        public function excluir($categorias)
         {
             $con = Conexao::getConexao();
             $retorno = false;

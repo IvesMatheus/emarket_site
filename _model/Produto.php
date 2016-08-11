@@ -33,14 +33,18 @@
         /**
         * Caminho da imagem que representa o produto
         */
-        private $imagem
+        private $imagem;
+        /**
+        * Categoria a qual pertence o produto
+        */
+        private $categoria;
 
-        public function __constructor()
+        public function __construct()
         {
             $args = func_get_args();
             $num_args = func_num_args();
 
-            if($num_args == 7)
+            if($num_args == 8)
             {
                 $this->id = $args[0];
                 $this->nome = $args[1];
@@ -49,8 +53,9 @@
                 $this->quantidade = $args[4];
                 $this->preco = $args[5];
                 $this->imagem = $args[6];
+                $this->categoria = $args[7];
             }
-            else if($num_args == 6)
+            else if($num_args == 7)
             {
                 $this->id = 0;
                 $this->nome = $args[0];
@@ -59,6 +64,7 @@
                 $this->quantidade = $args[3];
                 $this->preco = $args[4];
                 $this->imagem = $args[5];
+                $this->categoria = $args[6];
             }
             else
             {
@@ -69,6 +75,7 @@
                 $this->quantidade = 0;
                 $this->preco = 0.0;
                 $this->imagem = "";
+                $this->categoria = null;
             }
         }
 
@@ -137,9 +144,24 @@
             $this->imagem = $imagem;
         }
 
+        public function getImagem()
+        {
+            return $this->imagem;
+        }
+
+        public function setCategoria($categoria)
+        {
+            $this->categoria = $categoria;
+        }
+
+        public function getCategoria()
+        {
+            return $this->categoria;
+        }
+
         public function __toString()
         {
-            return $this->id."<br>".$this->nome."<br>".$this->peso."<br>".$this->validade."<br>".$this->quantidade."<b>".$this->preco."<br>".$this->imagem;
+            return $this->id."<br>".$this->nome."<br>".$this->peso."<br>".$this->validade."<br>".$this->quantidade."<br>".$this->preco."<br>".$this->imagem."<br>".$this->categoria;
         }
     }
 ?>
