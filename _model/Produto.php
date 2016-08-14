@@ -1,7 +1,7 @@
 <?php
     /**
     * Classe que representa um produto
-    * @version 1
+    * @version 2
     * @author Ives Matheus
     */
     class Produto
@@ -38,13 +38,21 @@
         * Categoria a qual pertence o produto
         */
         private $categoria;
+        /**
+        * Descricao do produto
+        */
+        private $descricao;
+        /**
+        * Mercado a qual o produto faz parte
+        */
+        private $mercado;
 
         public function __construct()
         {
             $args = func_get_args();
             $num_args = func_num_args();
 
-            if($num_args == 8)
+            if($num_args == 10)
             {
                 $this->id = $args[0];
                 $this->nome = $args[1];
@@ -54,8 +62,10 @@
                 $this->preco = $args[5];
                 $this->imagem = $args[6];
                 $this->categoria = $args[7];
+                $this->descricao = $args[8];
+                $this->mercado = $args[9];
             }
-            else if($num_args == 7)
+            else if($num_args == 9)
             {
                 $this->id = 0;
                 $this->nome = $args[0];
@@ -65,6 +75,8 @@
                 $this->preco = $args[4];
                 $this->imagem = $args[5];
                 $this->categoria = $args[6];
+                $this->descricao = $args[7];
+                $this->mercado = $args[8];
             }
             else
             {
@@ -74,8 +86,10 @@
                 $this->validade = 0;
                 $this->quantidade = 0;
                 $this->preco = 0.0;
-                $this->imagem = "";
+                $this->imagem = null;
                 $this->categoria = null;
+                $this->descricao = "";
+                $this->mercado = null;
             }
         }
 
@@ -159,9 +173,29 @@
             return $this->categoria;
         }
 
+        public function setDescricao($descricao)
+        {
+            $this->descricao = $descricao;
+        }
+
+        public function getDescricao()
+        {
+            return $this->descricao;
+        }
+
+        public function setMercado($mercado)
+        {
+            $this->mercado = $mercado;
+        }
+
+        public function getMercado()
+        {
+            return $this->mercado;
+        }
+
         public function __toString()
         {
-            return $this->id."<br>".$this->nome."<br>".$this->peso."<br>".$this->validade."<br>".$this->quantidade."<br>".$this->preco."<br>".$this->imagem."<br>".$this->categoria;
+            return $this->id."<br>".$this->nome."<br>".$this->peso."<br>".$this->validade."<br>".$this->quantidade."<br>".$this->preco."<br>".$this->imagem."<br>".$this->categoria."<br>".$this->descricao."<br>".$this->mercado;
         }
     }
 ?>
