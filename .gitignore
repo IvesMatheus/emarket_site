@@ -3,4 +3,7 @@ _model/teste.php
 _phps/insereCategoria.php
 _phps/listaCategoria.php
 _phps/testeProduto.php
+_phps/testeMercado.php
+_phps/testeCliente.php
+_phps/testeImagem.php
 insereCategoria.php

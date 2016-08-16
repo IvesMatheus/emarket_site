@@ -88,7 +88,7 @@
 
         public function getSenha()
         {
-            return $senha;
+            return $this->senha;
         }
 
         public function __toString()

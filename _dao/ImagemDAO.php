@@ -1,41 +1,41 @@
 <?php
     include_once "../_model/Conexao.php";
-    include_once "../_model/Categoria.php";
+    include_once "../_model/Imagem.php";
+    include_once "CategoriaDAO.php";
 
     /**
-    * Classe DAO de categoria que implementa métodos de CRUD e outras que meche no BD
+    * Classe DAO de imagem que implementa métodos de CRUD e outras que meche no BD
     * @version 1
     * @author Ives Matheus
     */
-    class CategoriaDAO
+    class ImagemDAO
     {
         public function __construct()
         {   }
 
         /**
-        * Método que insere várias categorias no BD
-        * @param $categorias array de categoria
-        * @return true ou false para caso de sucesso da inserção de dados
+        * Método que insere várias imagens no BD
+        * @param array de Imagem
+        * @return Verdadeiro ou Falso para caso de sucesso na inserção de dados
         * @version 1
         * @author Ives Matheus
         */
-        public function inserir($categorias)
+        public function inserir($imagens)
         {
             $con = Conexao::getConexao();
             $retorno = false;
 
             try
             {
-                $sql = "INSERT INTO categoria(nome, descricao, imagem) VALUES(:nome, :descricao, :imagem)";
+                $sql = "INSERT INTO imagem(caminho, id_categoria) VALUES(:caminho, :id_categoria)";
                 //$con->exec("set names utf8");
                 $con->beginTransaction();
 
-                foreach ($categorias as $key => $categoria)
+                foreach ($imagens as $key => $imagem)
                 {
                     $stm = $con->prepare($sql);
-                    $stm->bindValue("nome", $categoria->getNome());
-                    $stm->bindValue("descricao", $categoria->getDescricao());
-                    $stm->bindValue("imagem", $categoria->getImagem());
+                    $stm->bindValue("caminho", $imagem->getCaminho());
+                    $stm->bindValue("id_categoria", $imagem->getCategoria()->getId());
 
                     $stm->execute();
                 }
@@ -54,8 +54,8 @@
         }
 
         /**
-        * Método que lista todos as categorias no BD
-        * @return array contendo todas as categorias do BD
+        * Método que lista todas as imagem salvas no BD
+        * @return array de Imagem
         * @version 1
         * @author Ives Matheus
         */
@@ -67,20 +67,19 @@
             try
             {
                 $con = Conexao::getConexao();
-                $sql = "SELECT * FROM categoria";
+                $sql = "SELECT * FROM imagem";
 
                 $stm = $con->prepare($sql);
                 $stm->execute();
 
                 while($row = $stm->fetch())
                 {
-                    $categoria = new Categoria();
-                    $categoria->setId($row["id"]);
-                    $categoria->setNome($row["nome"]);
-                    $categoria->setDescricao($row["descricao"]);
-                    $categoria->setImagem($row["imagem"]);
+                    $imagem = new Imagem();
+                    $imagem->setId($row["id"]);
+                    $imagem->setCaminho($row["caminho"]);
+                    $imagem->setCategoria(CategoriaDAO::listaPorId(new Categoria($row["id_categoria"], "", "", "")));
 
-                    $retorno[$i] = $categoria;
+                    $retorno[$i] = $imagem;
                     $i++;
                 }
             }
@@ -95,32 +94,31 @@
         }
 
         /**
-        * Método que procura uma categoria filtrada pelo seu id no BD
-        * @param $categoria objeto contendo o id
-        * @return retorna uma categoria resultado da consulta ou null caso não exista
-        * @version 2
+        * Método que lista uma imagem filtrada pelo seu id
+        * @param $imagem obejto de Imagem contendo o id a ser filtrado
+        * @return objeto de Imagem contendo os dados listados
+        * @version 1
         * @author Ives Matheus
         */
-        public static function listarPorId($categoria)
+        public static function listarPorId($imagem)
         {
             $retorno = null;
 
             try
             {
                 $con = Conexao::getConexao();
-                $sql = "SELECT * FROM categoria WHERE id = :id";
+                $sql = "SELECT * FROM imagem WHERE id = :id";
 
                 $stm = $con->prepare($sql);
-                $stm->bindValue("id", $categoria->getId());
+                $stm->bindValue("id", $imagem->getId());
                 $stm->execute();
 
                 while($row = $stm->fetch())
                 {
-                    $retorno = new Categoria();
+                    $retorno = new Imagem();
                     $retorno->setId($row["id"]);
-                    $retorno->setNome($row["nome"]);
-                    $retorno->setDescricao($row["descricao"]);
-                    $retorno->setImagem($row["imagem"]);
+                    $retorno->setCaminho($row["caminho"]);
+                    $retorno->setCategoria(CategoriaDAO::listarPorId(new Categoria($row["id_categoria"], "", "", "")));
                 }
             }
             catch (PDOException $e)
@@ -134,29 +132,29 @@
         }
 
         /**
-        * Método que atualiza várias categorias no BD
-        * @param $categorias array de categoria
-        * @return true ou false para caso de sucesso na atualização de dados
+        * Método que atualiza dados de várias imagens
+        * @param $imagens array de Imagem
+        * @return verdadeiro ou falso para caso de sucesso para atualização dos dados
         * @version 1
         * @author Ives Matheus
         */
-        public function atualizar($categorias)
+        public function atualizar($imagens)
         {
             $con = Conexao::getConexao();
             $retorno = false;
 
             try
             {
-                $sql = "UPDATE categoria SET nome = :nome, descricao = :descricao, imagem = :imagem WHERE id = :id";
+                $sql = "UPDATE imagem SET caminho = :caminho, id_categoria = :id_categoria WHERE id = :id";
+                //$con->exec("set names utf8");
                 $con->beginTransaction();
 
-                foreach ($categorias as $key => $categoria)
+                foreach ($imagens as $key => $imagem)
                 {
                     $stm = $con->prepare($sql);
-                    $stm->bindValue("id", $categoria->getId());
-                    $stm->bindValue("nome", $categoria->getNome());
-                    $stm->bindValue("descricao", $categoria->getDescricao());
-                    $stm->bindValue("imagem", $categoria->getImagem());
+                    $stm->bindValue("id", $imagem->getId());
+                    $stm->bindValue("caminho", $imagem->getCaminho());
+                    $stm->bindValue("id_categoria", $imagem->getCategoria()->getId());
 
                     $stm->execute();
                 }
@@ -175,26 +173,27 @@
         }
 
         /**
-        * Método que exclui várias categorias
-        * @param $categorias array de categoria
-        * @return true ou false para caso de sucesso na exclusão de dados
+        * Método que exclui várias imagens do BD
+        * @param $imagens array de Imagem
+        * @return verdadeiro ou falso para caso de sucesso na atualização dos dados no BD
         * @version 1
         * @author Ives Matheus
         */
-        public function excluir($categorias)
+        public function excluir($imagens)
         {
             $con = Conexao::getConexao();
             $retorno = false;
 
             try
             {
-                $sql = "DELETE FROM categoria WHERE id = :id";
+                $sql = "DELETE FROM imagem WHERE id = :id";
+                //$con->exec("set names utf8");
                 $con->beginTransaction();
 
-                foreach ($categorias as $key => $categoria)
+                foreach ($imagens as $key => $imagem)
                 {
                     $stm = $con->prepare($sql);
-                    $stm->bindValue("id", $categoria->getId());
+                    $stm->bindValue("id", $imagem->getId());
                     $stm->execute();
                 }
 
