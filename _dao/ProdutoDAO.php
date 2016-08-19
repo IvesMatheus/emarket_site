@@ -1,24 +1,25 @@
 <?php
     include_once "../_model/Conexao.php";
     include_once "../_model/Produto.php";
+    include_once "MercadoDAO.php";
     include_once "CategoriaDAO.php";
+    include_once "ImagemDAO.php";
 
     /**
-     * Classe DAO de produto que implementa métodos de CRUD e outras que meche no BD
-     * @version 1
-     * @author Ives Matheus
-     */
+    * Classe DAO de produto que implementa métodos de CRUD e outras que meche no BD
+    * @version 3
+    * @author Ives Matheus
+    */
     class ProdutoDAO
     {
-
-        function __construct()
+        public function __construct()
         {   }
 
         /**
-        * Método que insere vários produtos no BD
-        * @param $produtos array de produto
-        * @return true ou false para caso de sucesso da inserção de dados
-        * @version 1
+        * Método que inseri vários produtos no BD
+        * @param $produtos array de Produto
+        * @return Verdadeiro ou falso para caso de sucesso na inserção de dados
+        * @version 2
         * @author Ives Matheus
         */
         public function inserir($produtos)
@@ -28,7 +29,7 @@
 
             try
             {
-                $sql = "INSERT INTO produto(nome, peso, validade, quantidade, preco, imagem, id_categoria) VALUES(:nome, :peso, :validade, :quantidade, :preco, :imagem, :id_categoria)";
+                $sql = "INSERT INTO produto(nome, peso, validade, quantidade, preco, id_categoria, descricao, id_mercado, id_imagem) VALUES(:nome, :peso, :validade, :quantidade, :preco, :id_categoria, :descricao, :id_mercado, :id_imagem)";
                 //$con->exec("set names utf8");
                 $con->beginTransaction();
 
@@ -40,8 +41,10 @@
                     $stm->bindValue("validade", $produto->getValidade());
                     $stm->bindValue("quantidade", $produto->getQuantidade());
                     $stm->bindValue("preco", $produto->getPreco());
-                    $stm->bindValue("imagem", $produto->getImagem());
                     $stm->bindValue("id_categoria", $produto->getCategoria()->getId());
+                    $stm->bindValue("descricao", $produto->getDescricao());
+                    $stm->bindValue("id_mercado", $produto->getMercado()->getId());
+                    $stm->bindValue("id_imagem", $produto->getImagem()->getId());
 
                     $stm->execute();
                 }
@@ -60,9 +63,9 @@
         }
 
         /**
-        * Método que lista todos os produtos no BD
-        * @return array contendo todos os produtos do BD
-        * @version 1
+        * Método que lista todos os produtos do BD
+        * @return array de Produto
+        * @version 2
         * @author Ives Matheus
         */
         public function listar()
@@ -81,20 +84,23 @@
                 while($row = $stm->fetch())
                 {
                     $produto = new Produto();
+
                     $produto->setId($row["id"]);
                     $produto->setNome($row["nome"]);
                     $produto->setPeso($row["peso"]);
                     $produto->setValidade($row["validade"]);
                     $produto->setQuantidade($row["quantidade"]);
                     $produto->setPreco($row["preco"]);
-                    $produto->setImagem($row["imagem"]);
-                    $produto->setCategoria(CategoriaDAO::listaPorId(new Categoria($row["id_categoria"], "", "", "")));
+                    $produto->setCategoria(CategoriaDAO::listarPorId(new Categoria($row["id_categoria"], "", "", "")));
+                    $produto->setDescricao($row["descricao"]);
+                    $produto->setMercado(MercadoDAO::listarPorId(new Mercado($row["id_mercado"], "", "", "", "", "", "", "", "", "", "", "", "", "", "")));
+                    $produto->setImagem(ImagemDAO::listarPorId(new Imagem($row["id_imagem"], "", null)));
 
                     $retorno[$i] = $produto;
                     $i++;
                 }
             }
-            catch (PDOException $e)
+            catch(PDOException $e)
             {
                 echo $e->getMessage();
             }
@@ -105,15 +111,16 @@
         }
 
         /**
-        * Método que procura um produto filtrado pelo seu id no BD
-        * @param $produto objeto contendo o id
-        * @return retorna um produto resultado da consulta ou null caso não exista
-        * @version 1
+        * Método que lista todos os produtos pelo seu id
+        * @param $produto objeto de Produto contendo o id a ser filtrado
+        * @return objeto de Produto
+        * @version 3
         * @author Ives Matheus
         */
-        public static function listaPorId($produto)
+        public static function listarPorId($produto)
         {
-            $retorno = null;
+            $retorno = array(0 => null);
+            $i = 0;
 
             try
             {
@@ -126,18 +133,24 @@
 
                 while($row = $stm->fetch())
                 {
-                    $retorno = new Produto();
-                    $retorno->setId($row["id"]);
-                    $retorno->setNome($row["nome"]);
-                    $retorno->setPeso($row["peso"]);
-                    $retorno->setValidade($row["validade"]);
-                    $retorno->setQuantidade($row["quantidade"]);
-                    $retorno->setPreco($row["preco"]);
-                    $retorno->setImagem($row["imagem"]);
-                    $retorno->setCategoria(CategoriaDAO::listaPorId(new Categoria($row["id_categoria"], "", "", "")));
+                    $produto = new Produto();
+
+                    $produto->setId($row["id"]);
+                    $produto->setNome($row["nome"]);
+                    $produto->setPeso($row["peso"]);
+                    $produto->setValidade($row["validade"]);
+                    $produto->setQuantidade($row["quantidade"]);
+                    $produto->setPreco($row["preco"]);
+                    $produto->setCategoria(CategoriaDAO::listarPorId(new Categoria($row["id_categoria"], "", "", "")));
+                    $produto->setDescricao($row["descricao"]);
+                    $produto->setMercado(MercadoDAO::listarPorId(new Mercado($row["id_mercado"], "", "", "", "", "", "", "", "", "", "", "", "", "", "")));
+                    $produto->setImagem(ImagemDAO::listarPorId(new Imagem($row["id_imagem"], "", null)));
+
+                    $retorno[$i] = $produto;
+                    $i++;
                 }
             }
-            catch (PDOException $e)
+            catch(PDOException $e)
             {
                 echo $e->getMessage();
             }
@@ -148,10 +161,60 @@
         }
 
         /**
-        * Método que atualiza vários produtos no BD
-        * @param $produtos array de produto
-        * @return true ou false para caso de sucesso na atualização de dados
+        * Método que lista todos os produtos de um mercado
+        * @param $mercado objeto de Mercado contendo o id a ser filtrado
+        * @return array de Produto
         * @version 1
+        * @author Ives Matheus
+        */
+        public function listarPorMercado($mercado)
+        {
+            $retorno = array(0 => null);
+            $i = 0;
+
+            try
+            {
+                $con = Conexao::getConexao();
+                $sql = "SELECT * FROM produto WHERE id_mercado = :id_mercado";
+
+                $stm = $con->prepare($sql);
+                $stm->bindValue("id_mercado", $mercado->getId());
+                $stm->execute();
+
+                while($row = $stm->fetch())
+                {
+                    $produto = new Produto();
+
+                    $produto->setId($row["id"]);
+                    $produto->setNome($row["nome"]);
+                    $produto->setPeso($row["peso"]);
+                    $produto->setValidade($row["validade"]);
+                    $produto->setQuantidade($row["quantidade"]);
+                    $produto->setPreco($row["preco"]);
+                    $produto->setCategoria(CategoriaDAO::listarPorId(new Categoria($row["id_categoria"], "", "", "")));
+                    $produto->setDescricao($row["descricao"]);
+                    $produto->setMercado(MercadoDAO::listarPorId(new Mercado($row["id_mercado"], "", "", "", "", "", "", "", "", "", "", "", "", "", "")));
+                    $produto->setImagem(ImagemDAO::listarPorId(new Imagem($row["id_imagem"], "", null)));
+
+                    $retorno[$i] = $produto;
+                    $i++;
+                }
+            }
+            catch(PDOException $e)
+            {
+                echo $e->getMessage();
+            }
+            finally
+            {
+                return $retorno;
+            }
+        }
+
+        /**
+        * Método que atualiza vários produtos
+        * @param $produtos array de Produto
+        * @return Verdadeiro ou falso para caso de sucesso na atualização dos dados
+        * @version 2
         * @author Ives Matheus
         */
         public function atualizar($produtos)
@@ -161,7 +224,8 @@
 
             try
             {
-                $sql = "UPDATE produto SET nome = :nome, peso = :peso, validade = :validade, quantidade = :quantidade, preco = :preco, imagem = :imagem, id_categoria = :id_categoria WHERE id = :id";
+                $sql = "UPDATE produto SET nome = :nome, peso = :peso, validade = :validade, quantidade = :quantidade, preco = :preco, id_categoria = :id_categoria, descricao = :descricao, id_mercado = :id_mercado, id_imagem = :id_imagem WHERE id = :id";
+                //$con->exec("set names utf8");
                 $con->beginTransaction();
 
                 foreach ($produtos as $key => $produto)
@@ -173,8 +237,10 @@
                     $stm->bindValue("validade", $produto->getValidade());
                     $stm->bindValue("quantidade", $produto->getQuantidade());
                     $stm->bindValue("preco", $produto->getPreco());
-                    $stm->bindValue("imagem", $produto->getImagem());
                     $stm->bindValue("id_categoria", $produto->getCategoria()->getId());
+                    $stm->bindValue("descricao", $produto->getDescricao());
+                    $stm->bindValue("id_mercado", $produto->getMercado()->getId());
+                    $stm->bindValue("id_imagem", $produto->getImagem()->getId());
 
                     $stm->execute();
                 }
@@ -193,10 +259,10 @@
         }
 
         /**
-        * Método que exclui vários produtos
-        * @param $produtos array de produto
-        * @return true ou false para caso de sucesso na exclusão de dados
-        * @version 1
+        * Método que exclui vários produtos do BD
+        * @param $produtos array de Produto
+        * @return Verdadeiro ou falso para caso de sucesso na exclusão dos dados
+        * @version 2
         * @author Ives Matheus
         */
         public function excluir($produtos)
@@ -207,6 +273,7 @@
             try
             {
                 $sql = "DELETE FROM produto WHERE id = :id";
+                //$con->exec("set names utf8");
                 $con->beginTransaction();
 
                 foreach ($produtos as $key => $produto)
@@ -228,7 +295,5 @@
                 return $retorno;
             }
         }
-
     }
-
 ?>

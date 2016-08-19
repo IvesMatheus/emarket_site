@@ -161,6 +161,57 @@
         }
 
         /**
+        * Métood que retorna um mercado listado pelo código
+        * @param $mercado objeto de Mercado contendo o codigo
+        * @return objeto de Mercado com os dados listados
+        * @version 2
+        * @author Ives Matheus
+        */
+        public function listarPorCodigo($mercado)
+        {
+            $retorno = null;
+
+            try
+            {
+                $con = Conexao::getConexao();
+                $sql = "SELECT * FROM mercado WHERE codigo = :codigo";
+
+                $stm = $con->prepare($sql);
+                $stm->bindValue("codigo", $mercado->getCodigo());
+                $stm->execute();
+
+                while($row = $stm->fetch())
+                {
+                    $retorno = new Mercado();
+
+                    $retorno->setId($row["id"]);
+                    $retorno->setNome($row["nome"]);
+                    $retorno->setRua($row["rua"]);
+                    $retorno->setBairro($row["bairro"]);
+                    $retorno->setNumero($row["numero"]);
+                    $retorno->setComplemento($row["complemento"]);
+                    $retorno->setCodigo($row["codigo"]);
+                    $retorno->setLatitude($row["latitude"]);
+                    $retorno->setLongitude($row["longitude"]);
+                    $retorno->setHoraAbertura($row["hora_abertura"]);
+                    $retorno->setHoraFechamento($row["hora_fechamento"]);
+                    $retorno->setLogo($row["logo"]);
+                    $retorno->setServicoEntrega($row["servico_entrega"]);
+                    $mercado->setTaxaEntrega($row["taxa_entrega"]);
+                    $retorno->setVmc($row["vmc"]);
+                }
+            }
+            catch(PDOException $e)
+            {
+                echo $e->getMessage();
+            }
+            finally
+            {
+                return $retorno;
+            }
+        }
+
+        /**
         * Método que atualiza os dados de um mercado que possue o id passado
         * @param $mercado objeto de Mercado contendo o id que será usado no filtro e os novos dados do mercado
         * @return verdadeiro ou falso para caso de sucesso na atualização dos dados
