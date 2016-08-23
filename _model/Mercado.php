@@ -68,13 +68,21 @@
         * Valor mínimo de compra para o mercado fazer entrega (Para os que possuem o serviço)
         */
         private $vmc;
+        /**
+        * Login do mercado no site
+        */
+        private $login;
+        /**
+        * Senha do mercado no site
+        */
+        private $senha;
 
         public function __construct()
         {
             $args = func_get_args();
             $num_args = func_num_args();
 
-            if($num_args == 15)
+            if($num_args == 17)
             {
                 $this->id = $args[0];
                 $this->nome = $args[1];
@@ -91,8 +99,10 @@
                 $this->servico_entrega = $args[12];
                 $this->taxa_entrega = $args[13];
                 $this->vmc = $args[14];
+                $this->login = $args[15];
+                $this->senha = $args[16];
             }
-            else if($num_args == 14)
+            else if($num_args == 16)
             {
                 $this->id = 0;
                 $this->nome = $args[0];
@@ -109,6 +119,8 @@
                 $this->servico_entrega = $args[11];
                 $this->taxa_entrega = $args[12];
                 $this->vmc = $args[13];
+                $this->login = $args[14];
+                $this->senha = $args[15];
             }
             else
             {
@@ -280,9 +292,29 @@
             return $this->vmc;
         }
 
+        public function setLogin($login)
+        {
+            $this->login = $login;
+        }
+
+        public function getLogin()
+        {
+            return $this->login;
+        }
+
+        public function setSenha($senha)
+        {
+            $this->senha = $senha;
+        }
+
+        public function getSenha()
+        {
+            return $this->senha;
+        }
+
         public function __toString()
         {
-            return $this->id."<br>".$this->nome."<br>".$this->rua."<br>".$this->bairro."<br>".$this->numero."<br>".$this->complemento."<br>".$this->codigo."<br>".$this->latitude."<br>".$this->longitude."<br>".$this->hora_abertura."<br>".$this->hora_fechamento."<br>".$this->logo."<br>".$this->servico_entrega."<br>".$this->taxa_entrega."<br>".$this->vmc;
+            return $this->id."<br>".$this->nome."<br>".$this->rua."<br>".$this->bairro."<br>".$this->numero."<br>".$this->complemento."<br>".$this->codigo."<br>".$this->latitude."<br>".$this->longitude."<br>".$this->hora_abertura."<br>".$this->hora_fechamento."<br>".$this->logo."<br>".$this->servico_entrega."<br>".$this->taxa_entrega."<br>".$this->vmc."<br>".$this->login."<br>".$this->senha."<br>";
         }
     }
 ?>

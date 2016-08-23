@@ -19,10 +19,25 @@ nav#menu
     float:left;
 }
 
-h5
+a
 {
-    color: gray;
+    background-color: orange;
+    padding: 5px;
+    text-decoration: none;
+    color: black;
+    border-radius: 5px;
 }
+
+a:hover
+{
+    border: 1px solid orange;
+    border-radius: 5px;
+    background-color: white;
+    color: orange;
+}
+
+h5
+{ color: gray; }
 
 ul
 {
@@ -37,8 +52,6 @@ li
     margin-right: 5px;
     text-align: center;
     display: inline-block;
-    background-color: orange;
-    padding: 5px;
 }
 
 div#main
@@ -69,6 +82,7 @@ div#lateral
 .subtitle
 {
     background-color: orange;
+    border-radius: 5px;
     width: 60%;
     padding: 5px;
     margin-left: 10px;
@@ -81,6 +95,46 @@ p
 }
 
 span.termo_destaque
+{ font-weight: bold; }
+
+fieldset#login
 {
-    font-weight: bold;
+    padding: 10px;
+    width: 100px;
+    border-radius: 5px;
+    margin: auto;
+    margin-top:50px;
+}
+
+div.btn
+{ float: right; }
+
+input
+{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.button
+{
+    width: 100px;
+    background-color: orange;
+    height: 25px;
+    border: 1px solid black;
+    color: black;
+}
+
+.button:active
+{
+    background-color: white;
+    border: 1px solid orange;
+    color:orange;
+}
+
+.text_login
+{
+    width: 200px;
+    border:1px solid black;
+    padding: 4px;
 }

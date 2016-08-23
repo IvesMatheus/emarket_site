@@ -16,7 +16,7 @@
         * Método que insere um mercado no BD
         * @param $mercado objeto de mercado contendo os dados a serem salvos no BD
         * @return true ou false para caso de sucesso da inserção de dados
-        * @version 1
+        * @version 2
         * @author Ives Matheus
         */
         public function inserir($mercado)
@@ -26,7 +26,7 @@
 
             try
             {
-                $sql = "INSERT INTO mercado(nome, rua, bairro, numero, complemento, codigo, latitude, longitude, hora_abertura, hora_fechamento, logo, servico_entrega, taxa_entrega, vmc) VALUES(:nome, :rua, :bairro, :numero, :complemento, :codigo, :latitude, :longitude, :hora_abertura, :hora_fechamento, :logo, :servico_entrega, :taxa_entrega, :vmc)";
+                $sql = "INSERT INTO mercado(nome, rua, bairro, numero, complemento, codigo, latitude, longitude, hora_abertura, hora_fechamento, logo, servico_entrega, taxa_entrega, vmc, login, senha) VALUES(:nome, :rua, :bairro, :numero, :complemento, :codigo, :latitude, :longitude, :hora_abertura, :hora_fechamento, :logo, :servico_entrega, :taxa_entrega, :vmc, :login, :senha)";
 
                 $stm = $con->prepare($sql);
                 $stm->bindValue("nome", $mercado->getNome());
@@ -43,6 +43,8 @@
                 $stm->bindValue("servico_entrega", $mercado->getServicoEntrega());
                 $stm->bindValue("taxa_entrega", $mercado->getTaxaEntrega());
                 $stm->bindValue("vmc", $mercado->getVmc());
+                $stm->bindValue("login", $mercado->getLogin());
+                $stm->bindValue("senha", $mercado->getSenha());
 
                 $retorno = $stm->execute();
             }
@@ -59,7 +61,7 @@
         /**
         * Método que lista todos os mercados do BD
         * @return array de Mercado
-        * @version 1
+        * @version 2
         * @author Ives Matheus
         */
         public function listar()
@@ -94,6 +96,8 @@
                     $mercado->setServicoEntrega($row["servico_entrega"]);
                     $mercado->setTaxaEntrega($row["taxa_entrega"]);
                     $mercado->setVmc($row["vmc"]);
+                    $mercado->setLogin($row["login"]);
+                    $mercado->setSenha($row["senha"]);
 
                     $retorno[$i] = $mercado;
                     $i++;
@@ -113,7 +117,7 @@
         * Métood que retorna um mercado listado pelo ID
         * @param $mercado objeto de Mercado contendo o id
         * @return objeto de Mercado com os dados listados
-        * @version 2
+        * @version 3
         * @author Ives Matheus
         */
         public static function listarPorId($mercado)
@@ -148,6 +152,8 @@
                     $retorno->setServicoEntrega($row["servico_entrega"]);
                     $mercado->setTaxaEntrega($row["taxa_entrega"]);
                     $retorno->setVmc($row["vmc"]);
+                    $retorno->setLogin($row["login"]);
+                    $retorno->setSenha($row["senha"]);
                 }
             }
             catch(PDOException $e)
@@ -164,7 +170,7 @@
         * Métood que retorna um mercado listado pelo código
         * @param $mercado objeto de Mercado contendo o codigo
         * @return objeto de Mercado com os dados listados
-        * @version 2
+        * @version 3
         * @author Ives Matheus
         */
         public function listarPorCodigo($mercado)
@@ -197,8 +203,57 @@
                     $retorno->setHoraFechamento($row["hora_fechamento"]);
                     $retorno->setLogo($row["logo"]);
                     $retorno->setServicoEntrega($row["servico_entrega"]);
-                    $mercado->setTaxaEntrega($row["taxa_entrega"]);
+                    $retorno->setTaxaEntrega($row["taxa_entrega"]);
                     $retorno->setVmc($row["vmc"]);
+                    $retorno->setLogin($row["login"]);
+                    $retorno->setSenha($row["senha"]);
+                }
+            }
+            catch(PDOException $e)
+            {
+                echo $e->getMessage();
+            }
+            finally
+            {
+                return $retorno;
+            }
+        }
+
+        public function verificaLogin($mercado)
+        {
+            $retorno = null;
+
+            try
+            {
+                $con = Conexao::getConexao();
+                $sql = "SELECT * FROM mercado WHERE login = :login AND senha = :senha";
+
+                $stm = $con->prepare($sql);
+                $stm->bindValue("login", $mercado->getLogin());
+                $stm->bindValue("senha", $mercado->getSenha());
+                $stm->execute();
+
+                while($row = $stm->fetch())
+                {
+                    $retorno = new Mercado();
+
+                    $retorno->setId($row["id"]);
+                    $retorno->setNome($row["nome"]);
+                    $retorno->setRua($row["rua"]);
+                    $retorno->setBairro($row["bairro"]);
+                    $retorno->setNumero($row["numero"]);
+                    $retorno->setComplemento($row["complemento"]);
+                    $retorno->setCodigo($row["codigo"]);
+                    $retorno->setLatitude($row["latitude"]);
+                    $retorno->setLongitude($row["longitude"]);
+                    $retorno->setHoraAbertura($row["hora_abertura"]);
+                    $retorno->setHoraFechamento($row["hora_fechamento"]);
+                    $retorno->setLogo($row["logo"]);
+                    $retorno->setServicoEntrega($row["servico_entrega"]);
+                    $retorno->setTaxaEntrega($row["taxa_entrega"]);
+                    $retorno->setVmc($row["vmc"]);
+                    $retorno->setLogin($row["login"]);
+                    $retorno->setSenha($row["senha"]);
                 }
             }
             catch(PDOException $e)
@@ -215,7 +270,7 @@
         * Método que atualiza os dados de um mercado que possue o id passado
         * @param $mercado objeto de Mercado contendo o id que será usado no filtro e os novos dados do mercado
         * @return verdadeiro ou falso para caso de sucesso na atualização dos dados
-        * @version 1
+        * @version 2
         * @author Ives Matheus
         */
         public function atualizar($mercado)
@@ -225,7 +280,7 @@
 
             try
             {
-                $sql = "UPDATE mercado SET nome = :nome, rua = :rua, bairro = :bairro, numero = :numero, complemento = :complemento, codigo = :codigo, latitude = :latitude, longitude = :longitude, hora_abertura = :hora_abertura, hora_fechamento = :hora_fechamento, logo = :logo, servico_entrega = :servico_entrega, taxa_entrega = :taxa_entrega, vmc = :vmc WHERE id = :id";
+                $sql = "UPDATE mercado SET nome = :nome, rua = :rua, bairro = :bairro, numero = :numero, complemento = :complemento, codigo = :codigo, latitude = :latitude, longitude = :longitude, hora_abertura = :hora_abertura, hora_fechamento = :hora_fechamento, logo = :logo, servico_entrega = :servico_entrega, taxa_entrega = :taxa_entrega, vmc = :vmc, login = :login, senha = :senha WHERE id = :id";
 
                 $stm = $con->prepare($sql);
                 $stm->bindValue("id", $mercado->getId());
@@ -243,6 +298,8 @@
                 $stm->bindValue("servico_entrega", $mercado->getServicoEntrega());
                 $stm->bindValue("taxa_entrega", $mercado->getTaxaEntrega());
                 $stm->bindValue("vmc", $mercado->getVmc());
+                $stm->bindValue("login", $mercado->getLogin());
+                $stm->bindValue("senha", $mercado->getSenha());
 
                 $retorno = $stm->execute();
             }
@@ -260,7 +317,7 @@
         * Método que exclui um mercado do BD
         * @param $mercado objeto contendo o id do mercado a ser excluído
         * @return verdadeiro ou falso para caso de sucesso de exclusão
-        * @version 1
+        * @version 2
         * @author Ives Matheus
         */
         public function excluir($mercado)
