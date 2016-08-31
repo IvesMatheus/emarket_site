@@ -1,5 +1,5 @@
 <?php
-    include_once "_model/Mercado.php";
+    include_once "../_model/Mercado.php";
     session_start();
 ?>
 <!DOCTYPE html>
@@ -7,7 +7,7 @@
     <head>
         <title>meuMercadinho</title>
         <meta charset="utf-8"/>
-        <link rel="stylesheet" href="_css/index.css">
+        <link rel="stylesheet" href="../_css/index.css">
     </head>
     <body>
         <header id="cabecalho">
@@ -16,8 +16,8 @@
                 <h5>O mercadinho de vizinhança online</h5>
             </div>
             <nav id="menu">
-                <ul>
-                    <li><a href="index.php">HOME</a></li>
+                <ul class="ul_menu">
+                    <li class="li_menu"><a href="../index.php">HOME</a></li>
                     <?php
                         $mercado = null;
 
@@ -26,17 +26,17 @@
 
                         if($mercado != null)
                         {
-                            echo "<li><a href=\"produtos.php\">PRODUTOS</a></li>";
-                            echo "<li><a href=\"mercado.php\">".$mercado->getNome()."</a></li>";
+                            echo "<li class=\"li_menu\"><a href=\"produtos.php\">PRODUTOS</a></li>";
+                            echo "<li class=\"li_menu\"><a href=\"mercado.php\">".$mercado->getNome()."</a></li>";
                         }
                         else
-                            echo "<li><a href=\"login.php\">LOGIN</a></li>";
+                            echo "<li class=\"li_menu\"><a href=\"../login.php\">LOGIN</a></li>";
                     ?>
                 </ul>
             </nav>
         </header>
         <div id="main">
-            <form name="login" action="_phps/verificaLogin.php" method="post">
+            <form name="login" action="../_phps/verificaLogin.php" method="post">
                 <fieldset id="login">
                     <legend>Login</legend>
                     Mercado:<br>

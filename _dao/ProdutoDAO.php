@@ -53,7 +53,7 @@
             }
             catch (PDOException $e)
             {
-                $retorno = $con->rollBack();
+                // $retorno = $con->rollBack();
                 echo $e->getMessage();
             }
             finally

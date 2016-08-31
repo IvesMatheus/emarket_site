@@ -39,14 +39,14 @@ a:hover
 h5
 { color: gray; }
 
-ul
+ul.ul_menu
 {
     list-style-type: none;
     text-transform: uppercase;
     float: right;
 }
 
-li
+li.li_menu
 {
     margin-left: 5px;
     margin-right: 5px;
@@ -57,7 +57,7 @@ li
 div#main
 {
     width: 100%;
-    height: 60%;
+    height: 70%;
     float: left;
     margin-top: 5px;
     border-top: 1px solid gray;
@@ -92,6 +92,13 @@ p
 {
     text-align: justify;
     text-indent: 50px;
+}
+
+p#contato
+{
+    text-align: justify;
+    text-indent: 0px;
+    margin-left: 10px;
 }
 
 span.termo_destaque
@@ -137,4 +144,236 @@ input
     width: 200px;
     border:1px solid black;
     padding: 4px;
+}
+
+p#msg_not_produto
+{
+    width: 300px;
+    margin: auto;
+    margin-top: 50px;
+    text-indent: 0px;
+    text-align: center;
+    font-size: 20px;
+}
+
+div#cadastrar_produto
+{
+    width: 100%;
+    text-align: center;
+}
+
+img.novo_produto
+{
+    width: 200px;
+    height: 260px;
+    border: 1px dashed gray;
+    text-align: center;
+}
+
+a#aqui
+{
+    background-color: white;
+    padding: 0px;
+    text-decoration: none;
+    border-radius: 0px;
+    color: red;
+    font-size: 30px;
+}
+
+a#aqui:hover
+{
+    border: 0px;
+    border-radius: 0px;
+    background-color: white;
+    color: red;
+    font-weight: bold;
+}
+
+div#add_produto
+{
+    width: 40%;
+    /*margin-top: 10px;*/
+    padding-top: 5px;
+    margin-left: 10px;
+    float: left;
+    border-right: 1px solid gray;
+}
+
+div#visualizar_produto
+{
+    width: 57%;
+    position: fixed;
+    left: 40%;
+    bottom: 17%;
+    margin-left: 10px;
+    height: 55%;
+    float: left;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+div.campos_novo_produto
+{
+    width: 50%;
+    float: left;
+    margin-top: 5px;
+}
+
+select
+{
+    margin-top: 4px;
+    margin-bottom: 4px;
+    width: 210px;
+}
+
+#btn_salvar, #btn_visuzalizar
+{
+    margin-left: 5px;
+}
+
+
+img.img_visualizador
+{
+    width: 100px;
+    height: 200px;
+    float: left;
+    border: 1px dashed gray;
+}
+
+div.produto
+{
+    width: 50%;
+    float: left;
+    margin-bottom: 10px;
+}
+
+div.dados_produto
+{
+    width: 150px;
+    margin-left: 10px;
+    margin-right: 10px;
+    float: left;
+    overflow: auto;
+}
+
+div.btn_add
+{
+    float:right;
+    margin-right: 20px;
+}
+
+div#btns_visuzalizar
+{
+    float: right;
+}
+
+.btn_visuzalizar
+{
+    width: 25px;
+    height: 25px;
+    background-color: orange;
+    border: 1px solid black;
+    color: black;
+}
+
+.btn_visuzalizar:active
+{
+    background-color: white;
+    border: 1px solid orange;
+    color:orange;
+}
+
+div#menu
+{
+    float: left;
+    width: 58.5%;
+    height: 7.2%;
+    position: fixed;
+    left: 40%;
+    margin-left: 10px;
+    text-align: center;
+}
+
+div#rodape
+{
+    width: 100%;
+    height: 10%;
+    border-top: 1px solid gray;
+    float:left;
+}
+
+label.lbl_produto
+{
+    margin: 5px;
+}
+
+img.img_produtos
+{
+    width: 40%;
+    height: 100px;
+    float: left;
+    margin-right: 5px;
+}
+
+div.dados
+{
+    width: 57%;
+    float: left;
+}
+
+div.produto1
+{
+    width: 20%;
+    margin-top: 5px;
+    margin-right: 50px;
+    float: left;
+}
+
+div.produto_1
+{
+    width: 100%;
+    float:left;
+}
+
+div.descricao
+{
+    float:left;
+}
+
+div#menu_produto
+{
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid gray;
+}
+
+.button_menu
+{
+    background-color: orange;
+    height: 25px;
+    border: 1px solid black;
+    color: black;
+}
+
+.button_menu:active
+{
+    background-color: white;
+    border: 1px solid orange;
+    color:orange;
+}
+
+.button_img
+{
+    width: 200px;
+    background-color: orange;
+    height: 25px;
+    border: 1px solid black;
+    color: black;
+}
+
+.button_img:active
+{
+    background-color: white;
+    border: 1px solid orange;
+    color:orange;
 }
